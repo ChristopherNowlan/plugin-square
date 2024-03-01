@@ -1,15 +1,17 @@
-import {CollectionAfterDeleteHook,CollectionConfig} from "payload/types";
+import {CollectionAfterDeleteHook, CollectionConfig} from "payload/types";
 import {APIError} from 'payload/errors'
 import {Client, Environment} from "square";
 
 import type {SquareConfig} from '../types'
 
 const squareAccessToken = process.env.SQUARE_ACCESS_TOKEN
+const squareEnvironment = process.env.SQUARE_EVIRONMENT
 
 const square = new Client({
   bearerAuthCredentials: {
     accessToken: squareAccessToken || ''
   },
+  environment: squareEnvironment ? Environment[squareEnvironment as keyof typeof Environment] : Environment.Sandbox
 })
 type HookArgsWithCustomCollection = Omit<Parameters<CollectionAfterDeleteHook>[0], 'collection'> & {
   collection: CollectionConfig

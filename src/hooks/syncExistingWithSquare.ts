@@ -9,11 +9,12 @@ import type {SquareConfig} from '../types'
 import {deepen} from "../utilities/deepen";
 
 const squareAccessToken = process.env.SQUARE_ACCESS_TOKEN
-
+const squareEnvironment = process.env.SQUARE_EVIRONMENT
 const square = new Client({
   bearerAuthCredentials: {
     accessToken: squareAccessToken || ''
   },
+  environment: squareEnvironment ? Environment[squareEnvironment as keyof typeof Environment] : Environment.Sandbox
 })
 type HookArgsWithCustomCollection = Omit<
   Parameters<CollectionBeforeChangeHook>[0],
