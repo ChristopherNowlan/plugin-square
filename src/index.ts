@@ -83,23 +83,23 @@ const squarePlugin =
         }),
         endpoints: [
           ...(config?.endpoints || []),
-          // {
-          //   handler: [
-          //     express.raw({ type: 'application/json' }),
-          //     async (req, res, next) => {
-          //       await squareWebhooks({
-          //         config,
-          //         next,
-          //         req,
-          //         res,
-          //         squareConfig,
-          //       })
-          //     },
-          //   ],
-          //   method: 'post',
-          //   path: '/square/webhooks',
-          //   root: true,
-          // },
+          {
+            handler: [
+              express.raw({ type: 'application/json' }),
+              async (req, res, next) => {
+                await squareWebhooks({
+                  config,
+                  next,
+                  req,
+                  res,
+                  squareConfig,
+                })
+              },
+            ],
+            method: 'get',
+            path: '/square/webhooks',
+            root: true,
+          },
         ],
       }
     }

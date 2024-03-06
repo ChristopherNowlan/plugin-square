@@ -1,12 +1,13 @@
-import type { Response } from 'express'
-import type { Config as PayloadConfig } from 'payload/config'
-import type { PayloadRequest } from 'payload/dist/types'
+import type {Response} from 'express'
+import type {Config as PayloadConfig} from 'payload/config'
+import type {PayloadRequest} from 'payload/dist/types'
 
-import {Client, WebhooksHelper} from 'square'
+import {Client, Environment, Event} from 'square'
 
-import type { SquareConfig } from '../types'
+import type {SquareConfig} from '../types'
 
-import { handleWebhooks } from '../webhooks'
+import {handleWebhooks} from '../webhooks'
+import {isFromSquare} from "../utilities/isFromSquare";
 
 export const squareWebhooks = async (args: {
   config: PayloadConfig
@@ -17,30 +18,27 @@ export const squareWebhooks = async (args: {
 }): Promise<any> => {
   const { config, req, res, squareConfig } = args
 
-  const { squareAccessToken, squareWebhooksEndpointSecret, webhooks } = squareConfig
+  const { squareAccessToken,squareEnvironment, webhooks } = squareConfig
+  const squareSignature = req.headers['x-square-hmacsha256-signature']
 
-  if (squareWebhooksEndpointSecret) {
+  // Need to test
+  if (isFromSquare(req.body, squareSignature as string )) {
     const square = new Client({
       bearerAuthCredentials: {
         accessToken: squareAccessToken || ''
       },
+      environment: Environment[squareEnvironment]
     })
 
 
-
-    const squareSignature = ''
-
     if (squareSignature) {
-      let event: WebhooksHelper | undefined
+      let event: Event | undefined
 
       try {
 
-        event = WebhooksHelper.isValidWebhookEventSignature(
-          req.body,
-          squareSignature,
-          squareWebhooksEndpointSecret,
-          ''
-        )
+        // Not sure if this correct
+        event = JSON.parse(req.body)
+
 
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : err
@@ -57,7 +55,7 @@ export const squareWebhooks = async (args: {
           squareConfig,
         })
 
-        // Fire external webhook handlers if they exist
+       //  Fire external webhook handlers if they exist
         if (typeof webhooks === 'function') {
           webhooks({
             config,
@@ -68,7 +66,7 @@ export const squareWebhooks = async (args: {
           })
         }
 
-        if (typeof webhooks === 'object') {
+        if (typeof webhooks === 'object' && event.type) {
           const webhookEventHandler = webhooks[event.type]
           if (typeof webhookEventHandler === 'function') {
             webhookEventHandler({

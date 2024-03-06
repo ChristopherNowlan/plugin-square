@@ -58,7 +58,7 @@ export const handleDeleted: HandleDeleted = async (args) => {
         if (logs) payload.logger.info(`- Deleting Payload document with ID: '${foundDoc.id}'...`)
 
         try {
-          payload.delete({
+          await payload.delete({
             id: foundDoc.id,
             collection: collectionSlug,
           })

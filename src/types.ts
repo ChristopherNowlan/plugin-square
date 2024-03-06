@@ -1,20 +1,12 @@
 import type { Payload } from 'payload'
 import type { Config as PayloadConfig } from 'payload/config'
-import type {WebhooksHelper} from "square";
-
-export interface PluginTypes {
-  /**
-   * Enable or disable plugin
-   * @default false
-   */
-  enabled?: boolean
-}
+import type {Client } from "square";
 
 export type SquareWebhookHandler<T = any> = (args: {
   config: PayloadConfig
   event: T
   payload: Payload
-  square: WebhooksHelper
+  square: Client
   squareConfig?: SquareConfig
 }) => void
 
@@ -32,7 +24,7 @@ export interface SyncConfig {
   collection: string
   fields: FieldSyncConfig[]
   squareResourceType: 'customersApi' | 'catalogApi' | 'ordersApi'
-  squareResourceTypeSingular: 'customer'  // TODO: there must be a better way to do this // use webhooks
+  squareResourceTypeSingular: 'customer' | 'catalog' | 'order' // TODO: there must be a better way to do this // use webhooks
 }
 
 
@@ -41,7 +33,9 @@ export interface SquareConfig {
   isTestKey?: boolean
   logs?: boolean
   squareAccessToken: string
-  squareWebhooksEndpointSecret?: string
+  squareEnvironment:  'Production' |
+    'Sandbox' |
+    'Custom'
   sync?: SyncConfig[]
   webhooks?: SquareWebhookHandler | SquareWebhookHandlers
 }

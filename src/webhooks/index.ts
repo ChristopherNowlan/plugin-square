@@ -6,12 +6,14 @@ import { handleDeleted } from './handleDeleted'
 export const handleWebhooks: SquareWebhookHandler = async (args) => {
   const { event, payload, squareConfig } = args
 
-  if (squareConfig?.logs)
-    payload.logger.info(`🪝 Received Square '${event.type}' webhook event with ID: '${event.id}'.`)
 
-  // could also traverse into event.data.object.object to get the type, but that seems unreliable
-  // use cli: `square resources` to see all available resources
+  if (squareConfig?.logs)
+    payload.logger.info(`🪝 Received Square '${event.type}' webhook event with ID: '${event.eventId}'.`)
+
+  // type customer.created === customer
   const resourceType = event.type.split('.')[0]
+
+  // type catalog.version.updated === 'updated
   const method = event.type.split('.').pop()
 
   const syncConfig = squareConfig?.sync?.find(
