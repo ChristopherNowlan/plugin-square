@@ -75,15 +75,15 @@ export const syncExistingWithSquare: CollectionBeforeChangeHookWithArgs = async 
             let squareResourceID
             // Has to be a better way
             switch (syncConfig.squareResourceType) {
-              case 'ordersApi' :
-                squareResource = await square?.[syncConfig?.squareResourceType]?.updateOrder(
+              case 'orders' :
+                squareResource = await square?.ordersApi?.updateOrder(
                   data.squareID,
                   syncedFields,
                 )
                 squareResourceID = squareResource.result.order?.id
                 break
-              case 'customersApi' :
-                squareResource = await square?.[syncConfig?.squareResourceType]?.updateCustomer(
+              case 'customers' :
+                squareResource = await square?.customersApi?.updateCustomer(
                   data.squareID,
                   syncedFields,
                 )

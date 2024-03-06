@@ -17,8 +17,7 @@ export const LinkToDoc: React.FC<
   const field = useFormFields(([fields]) => fields[nameOfIDField])
   const { value: squareID } = field || {}
 
-  const squareEnv = isTestKey ? 'test/' : ''
-  const href = `https://squareup.com/dsahboard/${squareEnv}${squareResourceType}/${squareID}`
+  const href = `https://squareup.com/dashboard/${squareResourceType}/${squareID}`
 
   if (squareID) {
     return (

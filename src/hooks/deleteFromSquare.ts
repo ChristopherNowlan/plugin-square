@@ -51,8 +51,8 @@ export const deleteFromSquare: CollectionAfterDeleteHookWithArgs = async (args) 
           // case 'ordersApi' :
           //   found = await square?.[syncConfig.squareResourceType]?.retrieveOrder(doc.squareID)
           //   break
-          case 'customersApi':
-            found = await square?.[syncConfig.squareResourceType]?.retrieveCustomer(doc.squareID)
+          case 'customers':
+            found = await square?.customersApi?.retrieveCustomer(doc.squareID)
             break
           default:
             break
@@ -62,8 +62,8 @@ export const deleteFromSquare: CollectionAfterDeleteHookWithArgs = async (args) 
         // @TODO extend past delete customer
         if (found) {
           switch (syncConfig.squareResourceType ) {
-            case 'customersApi':
-              await square?.[syncConfig.squareResourceType]?.deleteCustomer(doc.squareID)
+            case 'customers':
+              await square?.customersApi?.deleteCustomer(doc.squareID)
               break
             default:
               break

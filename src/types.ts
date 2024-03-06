@@ -23,7 +23,7 @@ export interface FieldSyncConfig {
 export interface SyncConfig {
   collection: string
   fields: FieldSyncConfig[]
-  squareResourceType: 'customersApi' | 'catalogApi' | 'ordersApi'
+  squareResourceType: 'customers' | 'catalog' | 'orders'
   squareResourceTypeSingular: 'customer' | 'catalog' | 'order' // TODO: there must be a better way to do this // use webhooks
 }
 
