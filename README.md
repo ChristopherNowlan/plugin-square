@@ -8,8 +8,9 @@ A plugin for [Payload](https://github.com/payloadcms/payload) to connect [Square
 In the `plugins` array of your [Payload config](https://payloadcms.com/docs/configuration/overview), call the plugin with [options](#options):
 
 ```ts
-import { buildConfig } from 'payload/config'
+import {buildConfig} from 'payload/config'
 import squarePlugin from 'plugin-square' // @TODO Update to be correct
+import {Environment} from "square";
 
 const config = buildConfig({
   plugins: [
