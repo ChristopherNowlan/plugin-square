@@ -32,11 +32,13 @@ export interface SyncConfig {
 export interface SquareConfig {
   isTestKey?: boolean
   logs?: boolean
+  rest?: boolean
   squareAccessToken: string
   squareEnvironment:  'Production' |
     'Sandbox' |
     'Custom'
   sync?: SyncConfig[]
+  squareIdempotencyKey: string
   webhooks?: SquareWebhookHandler | SquareWebhookHandlers
 }
 
@@ -52,6 +54,7 @@ export type SquareProxy = (args: {
   squareEnvironment:  'Production' |
   'Sandbox' |
   'Custom'
+  squareIdempotencyKey: string
 }) => Promise<{
   data?: any
   message?: string

@@ -4,7 +4,7 @@ import {Client, Environment} from 'square'
 import type { SquareProxy } from '../types'
 
 // @TODO only need if I use rest
-export const squareProxy: SquareProxy = async ({ squareArgs, squareMethod, squareAccessToken, squareEnvironment}) => {
+export const squareProxy: SquareProxy = async ({ squareArgs, squareMethod, squareAccessToken, squareEnvironment, squareIdempotencyKey}) => {
   const square = new Client({
       bearerAuthCredentials: {
         accessToken: squareAccessToken || ''
@@ -12,7 +12,9 @@ export const squareProxy: SquareProxy = async ({ squareArgs, squareMethod, squar
       squareVersion: '',
       environment: Environment[squareEnvironment],
       // customUrl: ''
+
     }
+
   )
 
   if (typeof squareMethod === 'string') {

@@ -97,7 +97,7 @@ export const createNewInSquare: CollectionBeforeValidateHookWithArgs = async ( a
                 case 'customers':
 
                   squareResource = await square?.customersApi.createCustomer(
-                    syncedFields as any
+                    syncedFields as any,
                   )
                   squareResourceID = squareResource.result.customer?.id
                   break

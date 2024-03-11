@@ -1,5 +1,6 @@
-import type { Config} from 'payload/config'
-
+import type {Config, Endpoint} from 'payload/config'
+import type {PayloadRequest} from "payload/types";
+import type {NextFunction, Response} from 'express'
 import express from 'express'
 
 import type { SanitizedSquareConfig, SquareConfig } from './types'
@@ -10,6 +11,8 @@ import { createNewInSquare } from './hooks/createNewInSquare'
 import { deleteFromSquare } from './hooks/deleteFromSquare'
 import { syncExistingWithSquare } from './hooks/syncExistingWithSquare'
 import { squareWebhooks } from './routes/webhooks'
+import {squareREST} from "./routes/rest";
+
 
 const squarePlugin =
   (incomingSquareConfig: SquareConfig) =>
@@ -19,6 +22,7 @@ const squarePlugin =
       // set config defaults here
       const squareConfig: SanitizedSquareConfig = {
         ...incomingSquareConfig,
+        rest: incomingSquareConfig?.rest ?? true,
         sync: incomingSquareConfig?.sync || [],
       }
 
@@ -100,6 +104,22 @@ const squarePlugin =
             path: '/square/webhooks',
             root: true,
           },
+          ...(incomingSquareConfig?.rest
+            ? [
+              {
+                handler: async (req: PayloadRequest, res: Response, next: NextFunction) => {
+                  await squareREST({
+                    next,
+                    req,
+                    res,
+                    squareConfig,
+                  })
+                },
+                method: 'post' as Endpoint['method'],
+                path: '/square/rest',
+              },
+            ]
+            : []),
         ],
       }
     }

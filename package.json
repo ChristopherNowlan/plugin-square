@@ -51,6 +51,7 @@
   },
   "packageManager": "yarn@4.0.1",
   "dependencies": {
+    "crypto": "^1.0.1",
     "express": "^4.18.2",
     "lodash.get": "^4.4.2",
     "square": "^35.0.0",
